@@ -1,0 +1,6 @@
+#DFK 32BUX386 12345678 for example. Start with # means COMMENT.
+#Do not use Japanese in this file, otherwise you will be in trouble.
+DFK 33BUX287 12345678
+DFK 37BUX287 22345678
+DFK 38BUX287 33345678
+DFK 35BUX287 44445678
