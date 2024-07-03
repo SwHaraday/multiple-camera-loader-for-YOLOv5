@@ -1,9 +1,14 @@
 # TIS-camera-loader-for-YOLOv5
-Up to 4 TIS (The Imaging Source) cameras can be used. Images will be concatenated and fed to model.
+## Up to 4 TIS (The Imaging Source) cameras can be used. Images will be concatenated and fed to model.
 
-Add following statement somewhere before detection loop:
+### Add following statement somewhere before detection loop:
     dataset = LoadV4TISCams(source, img_size=640, stride=32, auto=True)
 
-You can get image with following statement:
+### You can get image with following statement of detection loop:
     for source, frame_lb, frame, rbt_flag, bad in dataset:
+
+#### Tiled
+![](https://github.com/SwHaraday/TIS-camera-loader-for-YOLOv5/blob/main/sample_image/tiled.jpg)
+#### Vertical
+![](https://github.com/SwHaraday/TIS-camera-loader-for-YOLOv5/blob/main/sample_image/vertical.jpg)
 
