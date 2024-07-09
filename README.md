@@ -1,8 +1,8 @@
 # multiple-camera-loader-for-YOLOv5
 ## Up to 4 TIS (The Imaging Source) cameras can be used. Images will be concatenated and fed to model.
-### Also 4 Webcams can be used.
     - class LoadT4TISCams for tiled TIS camera images
     - class LoadV4TISCams for vertically concatenated TIS camera images
+### Also 4 Webcams can be used.
     - class LoadT4Streams for tiled Webcam images
     - class LoadV4Streams for vertically concatenated Webcam images
 
