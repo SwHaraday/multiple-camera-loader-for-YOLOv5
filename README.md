@@ -4,7 +4,7 @@
     - class LoadT4TISCams for tiled TIS camera images
     - class LoadV4TISCams for vertically concatenated TIS camera images
     - class LoadT4Streams for tiled Webcam images
-    - class LoadV4TISCams for vertically concatenated Webcam images
+    - class LoadV4Streams for vertically concatenated Webcam images
 
 ### Add following statement somewhere before detection loop:
     dataset = LoadV4TISCams(source, img_size=640, stride=32, auto=True)
