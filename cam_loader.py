@@ -1,3 +1,4 @@
+# THIS 📷 by SWCC Corporation, GPL-3.0 license
 """
 usage :
     dataset = LoadV4TISCams(source, img_size=640, stride=32, auto=True)
@@ -104,6 +105,7 @@ class LoadT4TISCams:
             ic.IC_OpenDevByUniqueName(hGrabber[i], tis.T(s)) # シリアルナンバーの指定も可能
             ic.IC_SetVideoFormat(hGrabber[i], tis.T(vformat))
             if (ic.IC_IsDevValid(hGrabber[i])): # カメラが開けたら
+                # 個別に設定するならここで分岐か？
                 # カメラの露光時間、FPS、ホワイトバランス、ゲインなどを設定する 
                 # fps: - 549 と Exposure ：0.000001 - 30.0              
                 ic.IC_SetFrameRate(hGrabber[i], ctypes.c_float(self.fps))
@@ -137,12 +139,12 @@ class LoadT4TISCams:
 
     def update(self, i, hGrabber, stream, ic, ctypes, tis):
         # Read stream `i` frames in daemon thread
-        n, f, read = 0, self.frames[i], 1  # frame number, frame array, inference every 'read' frame
+        f, read = self.frames[i], 1  # frame number, frame array, inference every 'read' frame
         Width = ctypes.c_long()
         Height = ctypes.c_long()
         BitsPerPixel = ctypes.c_int()
         colorformat = ctypes.c_int()
-        while (ic.IC_IsDevValid(hGrabber)) and n < f and self.flag:
+        while (ic.IC_IsDevValid(hGrabber)) and self.flag:
             # かなり長い記述になるが以下self.imgs[i] = im までで画像をOpenCVに渡せる形で取得している
             if ic.IC_SnapImage(hGrabber) == tis.IC_SUCCESS:
                 # Query values of image description
@@ -150,7 +152,6 @@ class LoadT4TISCams:
                 # Calculate the buffer size
                 bpp = int(BitsPerPixel.value / 8.0)
                 buffer_size = Width.value * Height.value * BitsPerPixel.value
-                n += 1
                 imagePtr = ic.IC_GetImagePtr(hGrabber)
                 imagedata = ctypes.cast(imagePtr, ctypes.POINTER(ctypes.c_ubyte * buffer_size))
                 # Create the numpy array
@@ -257,7 +258,7 @@ class LoadV4TISCams:
         self.fps = 70
         self.w = 720 #640
         self.h = 180 #160 # temporary definition
-        vformat = "RGB64 ({0}x{1})".format(self.w, self.h) # カメラのビデオフォーマットを指定する定数　WDR機能を使うのでRGB64とした。
+        vformat = "RGB24 ({0}x{1})".format(self.w, self.h) # カメラのビデオフォーマットを指定する定数　WDR機能を使うのでRGB64とした。
         
         ic = ctypes.cdll.LoadLibrary("./tisgrabber_x64.dll") # TISおまじない1
         tis.declareFunctions(ic) # TISおまじない2
@@ -320,12 +321,12 @@ class LoadV4TISCams:
 
     def update(self, i, hGrabber, stream, ic, ctypes, tis):
         # Read stream `i` frames in daemon thread
-        n, f, read = 0, self.frames[i], 1  # frame number, frame array, inference every 'read' frame
+        f, read = self.frames[i], 1  # frame number, frame array, inference every 'read' frame
         Width = ctypes.c_long()
         Height = ctypes.c_long()
         BitsPerPixel = ctypes.c_int()
         colorformat = ctypes.c_int()
-        while (ic.IC_IsDevValid(hGrabber)) and n < f and self.flag:
+        while (ic.IC_IsDevValid(hGrabber)) and self.flag:
             # かなり長い記述になるが以下self.imgs[i] = im までで画像をOpenCVに渡せる形で取得している
             if ic.IC_SnapImage(hGrabber) == tis.IC_SUCCESS:
                 # Query values of image description
@@ -333,7 +334,6 @@ class LoadV4TISCams:
                 # Calculate the buffer size
                 bpp = int(BitsPerPixel.value / 8.0)
                 buffer_size = Width.value * Height.value * BitsPerPixel.value
-                n += 1
                 imagePtr = ic.IC_GetImagePtr(hGrabber)
                 imagedata = ctypes.cast(imagePtr, ctypes.POINTER(ctypes.c_ubyte * buffer_size))
                 # Create the numpy array
